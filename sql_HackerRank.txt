@@ -1,0 +1,64 @@
+/* Write an SQL query to calculate the bonus of each employee. The bonus of an employee is 100% of their salary if the ID of the employee is an odd number and the employee name does not start with the character 'M'. The bonus of an employee is 0 otherwise.
+*/
+Return the result table ordered by employee_id.
+# Write your MySQL query statement below
+SELECT employee_id, 
+        CASE WHEN employee_id %2 <>0 AND LEFT(name, 1) <> 'M' 
+        THEN salary 
+        ELSE 0 
+        END  AS bonus
+FROM Employees
+ORDER BY employee_id;
+
+SELECT 
+    employee_id,
+    CASE 
+        WHEN employee_id % 2 <> 0 AND name NOT LIKE 'M%' THEN salary
+        ELSE 0
+    END bonus
+FROM
+    Employees
+ORDER BY 
+    employee_id
+
+# -----------
+
+SELECT 
+    *
+FROM    (
+    SELECT 
+        CONCAT (
+            Name, 
+            '(', 
+            LEFT(Occupation, 1), 
+            ')'
+                ) AS name2
+    FROM
+        OCCUPATIONS
+        ) a
+            
+UNION
+
+SELECT 
+    CONCAT  (
+        "There are a total of ", 
+        CNT," ", 
+        LOWER(Occupation), 
+        's.'
+            ) AS cnt2
+FROM    (
+    SELECT  
+        COUNT(Occupation) AS CNT, 
+        Occupation
+    FROM    
+        OCCUPATIONS
+    GROUP BY 
+        Occupation
+    ORDER BY 
+        CNT, 
+        Occupation
+        ) b
+ORDER BY name2;
+
+/*NOTE: Ordering table 'a' by Name made no difference AFTER the union, so only used final order by (name2).*/
+
